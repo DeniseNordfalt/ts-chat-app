@@ -2,7 +2,9 @@ import cors from "cors";
 import express, { Application, json } from "express";
 import dotenv from "dotenv";
 import messagesController from "./controllers/messages-controller";
-import { setupMongoDb } from "./models/chat-repository";
+import { setupMongoDb } from "./models/messages-repository";
+
+import usersController from "./controllers/users-controllers";
 
 dotenv.config();
 
@@ -14,6 +16,7 @@ const mongoUrl: string =
   process.env.MONGODB_URL || "mongodb://localhost:27017/chat";
 
 app.use("/messages", messagesController);
+app.use("/users", usersController);
 
 app.listen(port, async function () {
   await setupMongoDb(mongoUrl);
