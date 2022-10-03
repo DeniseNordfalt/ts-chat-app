@@ -3,7 +3,7 @@ import {
   loadAllMessageItems,
   loadMessageItem,
   saveMessageItem,
-} from "../models/chat-repository";
+} from "../models/messages-repository";
 
 export const saveMessage = async (
   messageItem: MessageItem
