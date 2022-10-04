@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { ChakraProvider } from "@chakra-ui/react";
 import "./App.css";
 import { Link, Route, Routes } from "react-router-dom";
 import UserCreatePage from "./pages/UserCreatePage";
 import axios from "axios";
 
-import MessageItem from "@ts-chat-app/shared";
+import { MessageItem } from "@ts-chat-app/shared";
 
 axios.defaults.baseURL =
   process.env.REACT_APP_TODO_API || "http://localhost:3001";
@@ -91,7 +92,8 @@ function App() {
 
   return (
     <>
-      {/* <div className="App">
+      <ChakraProvider>
+        {/* <div className="App">
         <header className="App-header">My Message Lists</header>
         <section className="App-content">
           <MessageList messages={messages} error={error} />
@@ -105,9 +107,10 @@ function App() {
         </footer>
       </div> */}
 
-      <Routes>
-        <Route path="/register" element={<UserCreatePage />} />
-      </Routes>
+        <Routes>
+          <Route path="/register" element={<UserCreatePage />} />
+        </Routes>
+      </ChakraProvider>
     </>
   );
 }

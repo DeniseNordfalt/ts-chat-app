@@ -1,6 +1,6 @@
-export default interface UserItem {
+export interface UserItem {
   id?: string;
   name: string;
-  email: string;
+  email?: string;
   password: string;
 }

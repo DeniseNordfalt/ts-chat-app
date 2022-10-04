@@ -1,4 +1,4 @@
-import MessageItem from "@ts-chat-app/shared";
+import { MessageItem } from "@ts-chat-app/shared";
 import express, { Router, Request, Response } from "express";
 import {
   loadItemById,
