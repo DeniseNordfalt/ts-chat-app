@@ -10,6 +10,17 @@ import { MessageItem } from "@ts-chat-app/shared";
 axios.defaults.baseURL =
   process.env.REACT_APP_TODO_API || "http://localhost:3001";
 
+axios.interceptors.request.use((config) => {
+  if (!config?.headers) {
+    config.headers = {};
+  }
+  const jwt = localStorage.getItem("jwt");
+  if (jwt) {
+    config.headers["authorization"] = `Bearer ${jwt}`;
+  }
+  return config;
+});
+
 // const fetchMessages = async (): Promise<MessageItem[]> => {
 //   const response = await axios.get<MessageItem[]>("/messages");
 //   return response.data;
