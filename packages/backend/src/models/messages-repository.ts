@@ -1,4 +1,4 @@
-import MessageItem from "@ts-chat-app/shared";
+import { MessageItem } from "@ts-chat-app/shared";
 import { connect, model, Schema } from "mongoose";
 
 const MessageSchema = new Schema({
@@ -7,10 +7,6 @@ const MessageSchema = new Schema({
 });
 
 const MessageModel = model<MessageItem>("MessageItem", MessageSchema);
-
-export const setupMongoDb = async (url: string) => {
-  await connect(url);
-};
 
 export const loadAllMessageItems = async (): Promise<MessageItem[]> => {
   return MessageModel.find({}).exec();

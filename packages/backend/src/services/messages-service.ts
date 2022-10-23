@@ -1,9 +1,9 @@
-import MessageItem from "@ts-chat-app/shared";
+import { MessageItem } from "@ts-chat-app/shared";
 import {
   loadAllMessageItems,
   loadMessageItem,
   saveMessageItem,
-} from "../models/chat-repository";
+} from "../models/messages-repository";
 
 export const saveMessage = async (
   messageItem: MessageItem
