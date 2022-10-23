@@ -2,7 +2,7 @@ import { UserItem, Credentials } from "@ts-chat-app/shared";
 import { NextFunction, Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
 import { getUserByUsername } from "./users-service";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const secret: string = process.env.JWT_SECRET || "secret";
 
