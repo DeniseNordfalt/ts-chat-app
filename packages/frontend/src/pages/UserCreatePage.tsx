@@ -1,75 +1,74 @@
 import React, { useState } from "react";
-import UserItem from "../user-item";
+import { UserItem } from "@ts-chat-app/shared";
+import FormInput from "../components/molecules/FormInput";
 
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:3001";
+axios.defaults.baseURL = "http://localhost:4000";
 
 type Props = {};
 
-const UserInput = ({
-  name,
-  setName,
-  password,
-  setPassword,
-  onCreate,
-}: {
-  name: string;
-  setName: (text: string) => void;
-  password: string;
-  setPassword: (text: string) => void;
-  onCreate: (name: string, password: string) => void;
-}) => {
-  return (
-    <>
-      <label htmlFor="name">Name</label>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <label htmlFor="password">Password</label>
-      <input
-        type="text"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={(e) => onCreate(name, password)}>Create user</button>
-    </>
-  );
-};
-
 export default function UserCreatePage({}: Props) {
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
 
-  const createUser = async (name: string, password: string) => {
-    const userItem: UserItem = {
-      name: name,
+  const createUser = async (
+    username: string,
+    password: string,
+    email: string
+  ) => {
+    const user: UserItem = {
+      username: username,
+      email: email,
       password: password,
     };
-
     try {
-      await axios.post("/users", userItem);
+      const response = await axios.post("/users", user);
+      console.log(response.data);
     } catch (error) {
-      setError("nope");
+      console.error(error);
     } finally {
-      setName("");
+      setUsername("");
       setPassword("");
+      setEmail("");
     }
   };
 
   return (
     <div>
-      <h1>UserCreatePage</h1>
-      <UserInput
-        name={name}
-        setName={setName}
-        password={password}
-        setPassword={setPassword}
-        onCreate={createUser}
-      />
+      <h1>Create User</h1>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          createUser(username, password, email);
+        }}
+      >
+        <FormInput
+          id="username"
+          label="Username"
+          value={username}
+          setValue={setUsername}
+        />
+
+        <FormInput
+          id="email"
+          label="Email"
+          value={email}
+          setValue={setEmail}
+          type="email"
+        />
+
+        <FormInput
+          id="password"
+          label="Password"
+          value={password}
+          setValue={setPassword}
+          type="password"
+        />
+
+        <button type="submit">Register</button>
+      </form>
     </div>
   );
 }
