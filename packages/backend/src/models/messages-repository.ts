@@ -22,5 +22,6 @@ export const saveMessageItem = async (
   messageItem: MessageItem
 ): Promise<void> => {
   const newModel = new MessageModel(messageItem);
-  newModel.save();
+
+  await newModel.save();
 };

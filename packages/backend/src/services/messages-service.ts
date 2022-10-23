@@ -4,6 +4,7 @@ import {
   loadMessageItem,
   saveMessageItem,
 } from "../models/messages-repository";
+import { sseClients } from "../app";
 
 export const saveMessage = async (
   messageItem: MessageItem
@@ -15,6 +16,9 @@ export const saveMessage = async (
   messageItem.timeStamp = new Date();
 
   await saveMessageItem(messageItem);
+  sseClients.forEach((c) => {
+    c.client.write(`data: ${JSON.stringify(messageItem)}\n\n`);
+  });
 
   return await loadAllMessageItems();
 };

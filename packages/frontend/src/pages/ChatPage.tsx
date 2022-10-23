@@ -3,9 +3,33 @@ import axios from "axios";
 import { MessageItem } from "@ts-chat-app/shared";
 import { Input, Button, Flex } from "@chakra-ui/react";
 
+import {
+  useEventSource,
+  useEventSourceListener,
+} from "@react-nano/use-event-source";
+
+axios.defaults.baseURL = "http://localhost:4000";
+
 type Props = {};
 
 export default function ChatPage({}: Props) {
+  const [messageText, setMessageText] = useState<string>("");
+  const [messages, setMessages] = useState<MessageItem[]>([]);
+  const [error, setError] = useState<string | undefined>();
+  const [eventSource] = useEventSource("http://localhost:4000/sse", true);
+
+  useEventSourceListener(
+    eventSource,
+    ["message"],
+    (event) => {
+      const message = JSON.parse(event.data) as MessageItem;
+      console.log("message", message);
+
+      setMessages((messages) => [...messages, message]);
+    },
+    [setMessages]
+  );
+
   const fetchMessages = async (): Promise<MessageItem[]> => {
     const response = await axios.get<MessageItem[]>("/messages");
     console.log(response.data);
@@ -34,10 +58,6 @@ export default function ChatPage({}: Props) {
     }
   };
 
-  const [messageText, setMessageText] = useState<string>("");
-  const [messages, setMessages] = useState<MessageItem[]>([]);
-  const [error, setError] = useState<string | undefined>();
-
   const MessageInput = ({
     messageText,
     setMessageText,
@@ -58,7 +78,6 @@ export default function ChatPage({}: Props) {
           //   bg="gray.100"
         >
           <Input
-            type="text"
             value={messageText}
             onChange={(e) => setMessageText(e.target.value)}
           />
@@ -76,15 +95,23 @@ export default function ChatPage({}: Props) {
       timeStamp: new Date(),
     };
 
+    // try {
+    //   await axios.post("/messages", messageItem);
+    //   const response = await axios.get<MessageItem[]>("/messages");
+    //   setMessages(response.data);
+    // } catch (err) {
+    //   setMessages([]);
+    //   setError("Something went wrong when fetching my messages...");
+    // } finally {
+    //   setMessageText("");
+    // }
     try {
-      await axios.post("/messages", messageItem);
-      const response = await axios.get<MessageItem[]>("/messages");
-      setMessages(response.data);
-    } catch (err) {
-      setMessages([]);
-      setError("Something went wrong when fetching my messages...");
-    } finally {
+      await axios.post(`/messages`, messageItem, {
+        withCredentials: true,
+      });
       setMessageText("");
+    } catch (err) {
+      setError("Something went wrong when fetching my messages...");
     }
   };
 

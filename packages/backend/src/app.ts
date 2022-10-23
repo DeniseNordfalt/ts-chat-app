@@ -6,11 +6,20 @@ import { setupMongoDb } from "./config/db";
 
 import usersController from "./controllers/users-controllers";
 import { authenticateToken, loginUser } from "./services/auth";
+import { randomUUID } from "crypto";
 
 dotenv.config();
 
 const app: Application = express();
-app.use(cors()); // TODO Configure CORS properly to make the app secure.
+
+const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:3000";
+
+app.use(
+  cors({
+    origin: CORS_ORIGIN,
+    credentials: true,
+  })
+);
 app.use(json());
 const port: number = parseInt(process.env.SERVER_PORT || "3001");
 const mongoUrl: string =
@@ -25,6 +34,35 @@ app.get("/", (req, res) => {
 
 app.use("/messages", messagesController);
 app.use("/users", usersController);
+
+type SseClient = {
+  id: string;
+  client: express.Response;
+};
+
+export let sseClients: SseClient[] = [];
+
+app.use("/sse", (req, res) => {
+  const headers = {
+    "Content-Type": "text/event-stream",
+    Connection: "keep-alive",
+    "Cache-Control": "no-cache",
+  };
+  res.writeHead(200, headers);
+
+  const clientId = randomUUID();
+  const newClient: SseClient = {
+    id: clientId,
+    client: res,
+  };
+
+  sseClients.push(newClient);
+
+  req.on("close", () => {
+    console.log(`${clientId} Connection closed`);
+    sseClients = sseClients.filter((c) => c.id !== clientId);
+  });
+});
 
 app.listen(port, async function () {
   await setupMongoDb(mongoUrl);
