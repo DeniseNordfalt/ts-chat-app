@@ -2,6 +2,7 @@ import { UserItem, Credentials } from "@ts-chat-app/shared";
 import { NextFunction, Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
 import { getUserByUsername } from "./users-service";
+import bcrypt from "bcrypt";
 
 const secret: string = process.env.JWT_SECRET || "secret";
 
@@ -53,7 +54,7 @@ export const loginUser = async (req: JwtRequest<UserItem>, res: Response) => {
     secret,
     { expiresIn: "1800s" }
   );
-  res.send(token);
+  res.send({ token: token });
   // return res.sendStatus(200);
 };
 
@@ -61,9 +62,14 @@ const performAuthentication = async (
   credentials: Credentials
 ): Promise<UserItem | null> => {
   const userItem = await getUserByUsername(credentials.username);
-  if (userItem && userItem.password === credentials.password) {
-    //TODO: FIX AUTH WITH COMPARE
-    return userItem;
+  if (userItem) {
+    const passwordMatch = await bcrypt.compare(
+      credentials.password,
+      userItem.password
+    );
+    if (passwordMatch) {
+      return userItem;
+    }
   }
   return null;
 };
