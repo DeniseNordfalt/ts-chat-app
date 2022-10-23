@@ -19,6 +19,10 @@ const mongoUrl: string =
 app.post("/login", loginUser);
 //TODO: MOVE OUT
 
+app.get("/", (req, res) => {
+  res.send("Server is running!");
+});
+
 app.use("/messages", messagesController);
 app.use("/users", usersController);
 
