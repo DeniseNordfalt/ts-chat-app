@@ -35,6 +35,7 @@ app.get("/", (req, res) => {
 app.use("/messages", messagesController);
 app.use("/users", usersController);
 
+// SSE setup
 type SseClient = {
   id: string;
   client: express.Response;
@@ -58,12 +59,15 @@ app.use("/sse", (req, res) => {
 
   sseClients.push(newClient);
 
+  console.log(`Client ${clientId} connected`);
+
   req.on("close", () => {
     console.log(`${clientId} Connection closed`);
     sseClients = sseClients.filter((c) => c.id !== clientId);
   });
 });
 
+//listen to the port and start the database
 app.listen(port, async function () {
   await setupMongoDb(mongoUrl);
   console.log(`App is listening on port ${port} !`);
