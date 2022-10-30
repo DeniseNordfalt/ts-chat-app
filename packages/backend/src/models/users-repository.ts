@@ -21,7 +21,6 @@ userSchema.pre(/save/, async function (next): Promise<void> {
 export const saveUserItem = async (user: UserItem): Promise<UserItem> => {
   const newUser = await User.create(user);
   return newUser;
-  //TODO: add error handling
 };
 
 const User = model<UserItem>("UserItem", userSchema);
@@ -29,7 +28,6 @@ const User = model<UserItem>("UserItem", userSchema);
 // loads all users
 export const loadAllUserItems = async (): Promise<UserItem[]> => {
   return User.find({}).exec();
-  //TODO: add error handling, remove password from response
 };
 
 //loads a user by id
@@ -37,7 +35,6 @@ export const loadUserItem = async (
   userId: string
 ): Promise<UserItem | null> => {
   return User.findById(userId).exec();
-  //TODO: add error handling, remove password from response
 };
 
 //loads a user by username
