@@ -1,21 +1,18 @@
 import { MessageItem } from "@ts-chat-app/shared";
-import express, { Router, Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import {
   loadItemById,
   loadMessages,
   saveMessage,
-} from "../services/messages-service";
+} from "../controllers/messages-service";
 
-const messagesController = express.Router();
+const messageRoutes = Router();
+messageRoutes;
+messageRoutes.get("/", async (req: Request, res: Response<MessageItem[]>) => {
+  res.send(await loadMessages());
+});
 
-messagesController.get(
-  "/",
-  async (req: Request, res: Response<MessageItem[]>) => {
-    res.send(await loadMessages());
-  }
-);
-
-messagesController.get(
+messageRoutes.get(
   "/:messageId",
   async (req: Request, res: Response<MessageItem>) => {
     try {
@@ -26,7 +23,7 @@ messagesController.get(
   }
 );
 
-messagesController.post(
+messageRoutes.post(
   "/",
   async (req: Request<MessageItem>, res: Response<MessageItem[]>) => {
     try {
@@ -37,4 +34,4 @@ messagesController.post(
   }
 );
 
-export default messagesController;
+export default messageRoutes;

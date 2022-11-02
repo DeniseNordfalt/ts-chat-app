@@ -6,6 +6,7 @@ import {
 } from "../models/messages-repository";
 import { sseClients } from "../app";
 
+//save a new message
 export const saveMessage = async (
   messageItem: MessageItem
 ): Promise<MessageItem[]> => {
@@ -23,10 +24,12 @@ export const saveMessage = async (
   return await loadAllMessageItems();
 };
 
+//loads all messages
 export const loadMessages = async (): Promise<MessageItem[]> => {
   return await loadAllMessageItems();
 };
 
+//loads a message by id
 export const loadItemById = async (messageId: string): Promise<MessageItem> => {
   const item = await loadMessageItem(messageId);
 
