@@ -25,21 +25,26 @@ export const saveUserItem = async (user: UserItem): Promise<UserItem> => {
 
 const User = model<UserItem>("UserItem", userSchema);
 
+//for verification
+export const loadUser = async (username: string): Promise<UserItem | null> => {
+  return User.findOne({ username: username }).exec();
+};
+
 // loads all users
 export const loadAllUserItems = async (): Promise<UserItem[]> => {
-  return User.find({}).exec();
+  return User.find({}, { password: 0 }).exec();
 };
 
 //loads a user by id
-export const loadUserItem = async (
+export const loadUserById = async (
   userId: string
 ): Promise<UserItem | null> => {
-  return User.findById(userId).exec();
+  return User.findById(userId, { password: 0 }).exec();
 };
 
 //loads a user by username
 export const loadUserItemByUsername = async (
   username: string
 ): Promise<UserItem | null> => {
-  return await User.findOne({ username: username }).exec();
+  return await User.findOne({ username: username }, { password: 0 }).exec();
 };
