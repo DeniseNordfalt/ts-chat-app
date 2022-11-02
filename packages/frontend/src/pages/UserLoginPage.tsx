@@ -16,7 +16,7 @@ export default function UserLoginPage({}: Props) {
       password: password,
     };
     try {
-      const response = await axios.post("/login", user);
+      const response = await axios.post("/auth/login", user);
       console.log(response.data);
       if (response.data.token) {
         localStorage.setItem("jwt_token", response.data.token);
