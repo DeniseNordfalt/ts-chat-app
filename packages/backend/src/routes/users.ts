@@ -1,6 +1,6 @@
 import { UserItem } from "@ts-chat-app/shared";
 import { Router, Request, Response } from "express";
-import { getUsers, saveUser, getUserById } from "../controllers/users-service";
+import { getUsers, saveUser, getUserById } from "../controllers/users";
 
 const userRoutes = Router();
 

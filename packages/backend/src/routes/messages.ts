@@ -4,7 +4,7 @@ import {
   loadItemById,
   loadMessages,
   saveMessage,
-} from "../controllers/messages-service";
+} from "../controllers/messages";
 
 const messageRoutes = Router();
 messageRoutes;
