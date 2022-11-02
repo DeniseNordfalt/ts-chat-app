@@ -1,18 +1,20 @@
 import cors from "cors";
 import express, { Application, json } from "express";
 import dotenv from "dotenv";
-import messagesController from "./controllers/messages-controller";
+
 import { setupMongoDb } from "./config/db";
 
-import usersController from "./controllers/users-controllers";
-import { authenticateToken, loginUser } from "./services/auth";
 import { randomUUID } from "crypto";
+import router from "./routes";
 
 dotenv.config();
 
 const app: Application = express();
 
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:3000";
+const port: number = parseInt(process.env.SERVER_PORT || "3001");
+const mongoUrl: string =
+  process.env.MONGODB_URL || "mongodb://localhost:27017/chat-app";
 
 app.use(
   cors({
@@ -21,19 +23,8 @@ app.use(
   })
 );
 app.use(json());
-const port: number = parseInt(process.env.SERVER_PORT || "3001");
-const mongoUrl: string =
-  process.env.MONGODB_URL || "mongodb://localhost:27017/chat-app";
 
-app.post("/login", loginUser);
-//TODO: MOVE OUT
-
-app.get("/", (req, res) => {
-  res.send("Server is running!");
-});
-
-app.use("/messages", messagesController);
-app.use("/users", usersController);
+app.use("/", router);
 
 // SSE setup
 type SseClient = {
@@ -59,7 +50,7 @@ app.use("/sse", (req, res) => {
 
   sseClients.push(newClient);
 
-  console.log(`Client ${clientId} connected`);
+  console.info(`Client ${clientId} connected`);
 
   req.on("close", () => {
     console.log(`${clientId} Connection closed`);
