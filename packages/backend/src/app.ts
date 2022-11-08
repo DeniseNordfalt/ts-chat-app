@@ -58,8 +58,8 @@ app.use("/sse", (req, res) => {
   });
 });
 
-//listen to the port and start the database
-app.listen(port, async function () {
+// listen to the port and start the database
+app.listen(port, async () => {
   await setupMongoDb(mongoUrl);
   console.log(`App is listening on port ${port} !`);
 });
