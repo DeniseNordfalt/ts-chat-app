@@ -47,7 +47,7 @@ export const loginUser = async (req: JwtRequest<UserItem>, res: Response) => {
     secret,
     { expiresIn: "1800s" }
   );
-  res.send({ token: token });
+  res.send({ token });
 };
 
 const performAuthentication = async (

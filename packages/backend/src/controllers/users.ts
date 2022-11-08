@@ -7,13 +7,13 @@ import {
   loadUserItemByUsername,
 } from "../models/users-repository";
 
-//saves a new user
+// saves a new user
 export const saveUser = async (UserItem: UserItem): Promise<UserItem> => {
-  if (!UserItem.username || UserItem.username == "") {
+  if (!UserItem.username || UserItem.username === "") {
     throw new Error("Invalid name on user item!");
   }
 
-  if (!UserItem.password || UserItem.password == "") {
+  if (!UserItem.password || UserItem.password === "") {
     throw new Error("Invalid password on user item!");
   }
 
@@ -21,12 +21,12 @@ export const saveUser = async (UserItem: UserItem): Promise<UserItem> => {
   return UserItem;
 };
 
-//loads all users
+// loads all users
 export const getUsers = async (): Promise<UserItem[]> => {
   return await loadAllUserItems();
 };
 
-//loads a user by id
+// loads a user by id
 export const getUserById = async (id: string): Promise<UserItem> => {
   const item = await loadUserById(id);
 
@@ -37,7 +37,7 @@ export const getUserById = async (id: string): Promise<UserItem> => {
   return item;
 };
 
-//loads a user by username
+// loads a user by username
 export const getUserByUsername = async (
   username: string
 ): Promise<UserItem | null> => {

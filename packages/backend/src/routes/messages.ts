@@ -7,7 +7,7 @@ import {
 } from "../controllers/messages";
 
 const messageRoutes = Router();
-messageRoutes;
+
 messageRoutes.get("/", async (req: Request, res: Response<MessageItem[]>) => {
   res.send(await loadMessages());
 });

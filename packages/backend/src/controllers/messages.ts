@@ -6,11 +6,11 @@ import {
 } from "../models/messages-repository";
 import { sseClients } from "../app";
 
-//save a new message
+// save a new message
 export const saveMessage = async (
   messageItem: MessageItem
 ): Promise<MessageItem[]> => {
-  if (!messageItem.text || messageItem.text == "") {
+  if (!messageItem.text || messageItem.text === "") {
     throw new Error("Invalid text on message item!");
   }
 
@@ -24,12 +24,12 @@ export const saveMessage = async (
   return await loadAllMessageItems();
 };
 
-//loads all messages
+// loads all messages
 export const loadMessages = async (): Promise<MessageItem[]> => {
   return await loadAllMessageItems();
 };
 
-//loads a message by id
+// loads a message by id
 export const loadItemById = async (messageId: string): Promise<MessageItem> => {
   const item = await loadMessageItem(messageId);
 
