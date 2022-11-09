@@ -23,7 +23,7 @@ export const saveUserItem = async (user: UserItem): Promise<UserItem> => {
   return newUser;
 };
 
-const User = model<UserItem>("UserItem", userSchema);
+export const User = model<UserItem>("UserItem", userSchema);
 
 // for verification
 export const loadUser = async (username: string): Promise<UserItem | null> => {
