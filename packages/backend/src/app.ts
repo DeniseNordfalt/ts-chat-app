@@ -63,3 +63,5 @@ app.listen(port, async () => {
   await setupMongoDb(mongoUrl);
   console.log(`App is listening on port ${port} !`);
 });
+
+export default app;
