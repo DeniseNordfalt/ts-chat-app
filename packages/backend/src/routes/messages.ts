@@ -1,37 +1,15 @@
-import { MessageItem } from "@ts-chat-app/shared";
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import {
   loadItemById,
   loadMessages,
   saveMessage,
 } from "../controllers/messages";
+import { authenticateToken } from "../controllers/auth";
 
 const messageRoutes = Router();
 
-messageRoutes.get("/", async (req: Request, res: Response<MessageItem[]>) => {
-  res.send(await loadMessages());
-});
-
-messageRoutes.get(
-  "/:messageId",
-  async (req: Request, res: Response<MessageItem>) => {
-    try {
-      res.send(await loadItemById(req.params.messageId));
-    } catch (e) {
-      res.sendStatus(404);
-    }
-  }
-);
-
-messageRoutes.post(
-  "/",
-  async (req: Request<MessageItem>, res: Response<MessageItem[]>) => {
-    try {
-      res.send(await saveMessage(req.body));
-    } catch (e) {
-      res.sendStatus(400);
-    }
-  }
-);
+messageRoutes.get("/", authenticateToken, loadMessages);
+messageRoutes.post("/", authenticateToken, saveMessage);
+messageRoutes.get("/:messageId", authenticateToken, loadItemById);
 
 export default messageRoutes;
