@@ -16,14 +16,13 @@ userSchema.pre(/save/, async function (next): Promise<void> {
   }
   next();
 });
+export const User = model<UserItem>("UserItem", userSchema);
 
 // saves the user to the database
 export const saveUserItem = async (user: UserItem): Promise<UserItem> => {
   const newUser = await User.create(user);
   return newUser;
 };
-
-export const User = model<UserItem>("UserItem", userSchema);
 
 // for verification
 export const loadUser = async (username: string): Promise<UserItem | null> => {
@@ -46,5 +45,5 @@ export const loadUserById = async (
 export const loadUserItemByUsername = async (
   username: string
 ): Promise<UserItem | null> => {
-  return await User.findOne({ username }, { password: 0 }).exec();
+  return User.findOne({ username }, { password: 0 }).exec();
 };
