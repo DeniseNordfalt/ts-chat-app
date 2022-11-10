@@ -6,12 +6,12 @@ import bcrypt from "bcryptjs";
 
 const secret: string = process.env.JWT_SECRET || "secret";
 
-export interface JwtRequest<Credentials> extends Request<Credentials> {
+export interface JwtRequest<T> extends Request<T> {
   jwt?: Credentials;
 }
 
-export const authenticateToken = (
-  req: JwtRequest<Credentials>,
+export const authenticateToken = async (
+  req: JwtRequest<unknown>,
   res: Response,
   next: NextFunction
 ) => {
@@ -28,7 +28,6 @@ export const authenticateToken = (
   } else {
     res.status(401).send("No token provided");
   }
-  next();
 };
 
 export const loginUser = async (req: JwtRequest<UserItem>, res: Response) => {
