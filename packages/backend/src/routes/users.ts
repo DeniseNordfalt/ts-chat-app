@@ -1,38 +1,17 @@
-import { UserItem } from "@ts-chat-app/shared";
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import {
   getUsers,
   saveUser,
   getUserById,
   getUserByUsername,
 } from "../controllers/users";
+import { authenticateToken } from "../controllers/auth";
 
 const userRoutes = Router();
 
-userRoutes.get("/", async (req: Request, res: Response<UserItem[]>) => {
-  res.send(await getUsers());
-});
-
-userRoutes.get("/id/:userId", async (req: Request, res: Response<UserItem>) => {
-  try {
-    res.send(await getUserById(req.params.userId));
-    console.log("User loaded", req.params.userId);
-  } catch (e) {
-    res.sendStatus(404);
-  }
-});
-
-// userRoutes.post(
-//   "/",
-//   async (req: Request<UserItem>, res: Response<UserItem>) => {
-//     try {
-//       res.send(await saveUser(req.body));
-//     } catch (e) {
-//       res.sendStatus(400);
-//     }
-//   }
-// );
-
 userRoutes.post("/", saveUser);
+userRoutes.get("/", authenticateToken, getUsers);
+userRoutes.get("/:username", authenticateToken, getUserByUsername);
+userRoutes.get("/id/:userId", authenticateToken, getUserById);
 
 export default userRoutes;

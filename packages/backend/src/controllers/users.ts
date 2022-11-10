@@ -9,63 +9,78 @@ import {
 } from "../models/users-repository";
 
 // saves a new user
-// export const saveUser = async (UserItem: UserItem): Promise<UserItem> => {
-//   if (!UserItem.username || UserItem.username === "") {
-//     throw new Error("Invalid name on user item!");
-//   }
-//   if (!UserItem.password || UserItem.password === "") {
-//     throw new Error("Invalid password on user item!");
-//   }
-//   try {
-//     const user = await saveUserItem(UserItem);
-//     return user;
-//   } catch (e) {
-//     throw new Error("Username already exists!");
-//   }
-// };
-
 export const saveUser = async (
   req: Request<UserItem>,
   res: Response<string>
-): Promise<void> => {
+) => {
   const user = req.body;
   if (!user.username || user.username === "") {
-    res.status(400).json("Invalid name on user item!");
+    return res.status(400).json("Invalid name on user item!");
   }
   if (!user.email || user.email === "") {
-    res.status(400).json("Invalid email on user item!");
+    return res.status(400).json("Invalid email on user item!");
   }
   if (!user.password || user.password === "") {
-    res.status(400).json("Invalid password on user item!");
+    return res.status(400).json("Invalid password on user item!");
   } else {
     try {
       await saveUserItem(req.body);
       res.status(201).json("User created");
     } catch (e) {
-      res.status(400).json("Something went wrong!");
+      res.status(400).json("Please provide unique username and email");
     }
   }
 };
 
 // loads all users
-export const getUsers = async (): Promise<UserItem[]> => {
-  return await loadAllUserItems();
+export const getUsers = async (
+  req: Request,
+  res: Response<UserItem[] | string>
+): Promise<void> => {
+  try {
+    const users = await loadAllUserItems();
+    if (users.length > 0) {
+      res.status(200).json(users);
+    } else {
+      res.status(404).json("No users found");
+    }
+  } catch (e) {
+    res.status(400).json("something went wrong!");
+  }
 };
 
 // loads a user by id
-export const getUserById = async (id: string): Promise<UserItem> => {
-  const item = await loadUserById(id);
-
-  if (!item) {
-    throw new Error(`Can't find item with id ${id}`);
+export const getUserById = async (
+  req: Request,
+  res: Response<UserItem | string>
+): Promise<UserItem | void> => {
+  const id = req.params.userId;
+  try {
+    const user = await loadUserById(id);
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json("User not found");
+    }
+  } catch (e) {
+    res.status(400).json("Something went wrong!");
   }
-
-  return item;
 };
 
 // loads a user by username
 export const getUserByUsername = async (
-  username: string
-): Promise<UserItem | null> => {
-  return await loadUserItemByUsername(username);
+  req: Request,
+  res: Response<UserItem | string>
+): Promise<UserItem | void> => {
+  const username = req.params.username;
+  try {
+    const user = await loadUserItemByUsername(username);
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json("User not found");
+    }
+  } catch (e) {
+    res.status(400).json("Something went wrong!");
+  }
 };
