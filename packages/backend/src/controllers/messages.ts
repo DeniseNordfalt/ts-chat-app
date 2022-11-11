@@ -68,11 +68,7 @@ export const loadMessages = async (
 ): Promise<void> => {
   try {
     const messages = await loadAllMessageItems();
-    // if (messages.length > 0) {
     res.status(200).json(messages);
-    // } else {
-    //   res.status(404).json(messages);
-    // }
   } catch (e) {
     res.status(400).json("Something went wrong!");
   }

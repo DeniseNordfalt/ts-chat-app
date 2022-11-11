@@ -13,13 +13,20 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   const token = localStorage.getItem("jwt_token");
 
   return (
-    <Flex direction="column" height="100vh" bgColor="grey">
-      <Box as="header" flex="0 0 auto">
+    <Flex
+      direction="column"
+      height="100vh"
+      width="100vw"
+      bg={"teal.100"}
+      maxW={{ base: "100%", md: "80%", lg: "60%" }}
+      margin="auto"
+    >
+      <Box as="header" flex="0 0 auto" bgColor="teal.500" color="white" p={4}>
         <Heading as="h1" size="lg" paddingStart={3}>
           <Link href="/">Chat App</Link>
         </Heading>
       </Box>
-      <Box as="nav" padding={2}>
+      <Box as="nav" padding={2} bgColor="teal.300" flex="0 0 auto">
         <Link href="/" padding={1}>
           Home
         </Link>
@@ -36,7 +43,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
         )}
       </Box>
 
-      <Box as="main" flex="1 1 auto" bgColor="white">
+      <Box as="main" flex="1 1 auto" margin="0 auto" minW="80%">
         {children}
       </Box>
       <Box as="footer" flex="0 0 auto"></Box>

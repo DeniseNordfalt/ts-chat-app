@@ -1,5 +1,7 @@
 import React from "react";
 import { MessageItem } from "@ts-chat-app/shared";
+import { Box } from "@chakra-ui/react";
+import Message from "./Message";
 
 export default function MessageList({
   messages,
@@ -14,14 +16,28 @@ export default function MessageList({
     return <div>No messages have been sent yet...</div>;
   } else {
     return (
-      <div>
+      <Box
+        overflowY={"scroll"}
+        scrollBehavior={"smooth"}
+        css={{
+          "&::-webkit-scrollbar": {
+            width: "4px",
+          },
+          "&::-webkit-scrollbar-track": {
+            width: "6px",
+          },
+        }}
+        padding={2}
+        borderRadius={4}
+        maxHeight={"calc(100vh - 200px)"}
+      >
         {messages.map((message, index) => (
-          <div key={index}>
-            User: {message.username} - Message: {message.text} - Time:
-            {message.timeStamp.toString()}
-          </div>
+          <Box key={index}>
+            <Message message={message} />
+          </Box>
         ))}
-      </div>
+        <Box id="end" />
+      </Box>
     );
   }
 }

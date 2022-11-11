@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import {
   useEventSource,
@@ -7,6 +7,7 @@ import {
 import { MessageItem } from "@ts-chat-app/shared";
 import ChatInput from "../components/molecules/ChatInput";
 import MessageList from "../components/MessageList";
+import { Box, Heading } from "@chakra-ui/react";
 
 axios.interceptors.request.use((config) => {
   if (!config?.headers) {
@@ -59,7 +60,11 @@ export default function ChatPage() {
       });
       setMessageText("");
     } catch (error) {
-      setError("Something went wrong when fetching my messages...");
+      setError("Error sending message");
+
+      setInterval(() => {
+        window.location.reload();
+      }, 2000);
     }
   };
 
@@ -74,19 +79,25 @@ export default function ChatPage() {
       });
   }, []);
 
+  useEffect(() => {
+    const end = document.getElementById("end");
+    if (end) {
+      end.scrollIntoView();
+    }
+  }, [messages]);
+
   return (
-    <div>
-      <header className="App-header">My Message Lists</header>
-      <section className="App-content">
+    <Box display={"flex"} flexDirection={"column"} width={"100%"}>
+      <Box minH={"80vh"}>
         <MessageList messages={messages} error={error} />
-      </section>
-      <footer className="App-footer">
+      </Box>
+      <Box bottom={0}>
         <ChatInput
           onCreate={() => createMessage(messageText)}
           setMessageText={setMessageText}
           messageText={messageText}
         />
-      </footer>
-    </div>
+      </Box>
+    </Box>
   );
 }
