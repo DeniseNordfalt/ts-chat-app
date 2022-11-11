@@ -13,14 +13,19 @@ export default function ChatInput({
   onCreate,
 }: Props) {
   return (
-    <Flex>
+    <Flex paddingTop={4}>
       <Input
         type={"text"}
         value={messageText}
         placeholder="Enter message"
         onChange={(e) => setMessageText(e.target.value)}
+        bg={"white"}
+        marginRight={2}
+        marginLeft={2}
       />
-      <Button onClick={onCreate}>Send message</Button>
+      <Button onClick={onCreate} marginRight={4}>
+        Send message
+      </Button>
     </Flex>
   );
 }
