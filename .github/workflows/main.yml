@@ -29,6 +29,7 @@ jobs:
           npm run -w packages/frontend eslint
       - name: status
         run: echo "This job's status is ${{ job.status }}."
+        
   test-job:
     runs-on: ubuntu-latest
     steps:
@@ -37,10 +38,22 @@ jobs:
         run: npm install
       - name: test on frontend
         run: npm run test -w packages/frontend
-      - name: test on backen
+      - name: test on backend
         run: npm run test -w packages/backend
       - name: status
         run: echo "This job's status is ${{ job.status }}."
+        
+  build-job:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v3
+      - name: npm clean install
+        run: npm ci 
+      - name: build frontend
+        run: npm run build -w packages/frontend
+      - name: builde backend
+        run: npm run build -w packages/backend
+    
       
       
 
