@@ -23,8 +23,13 @@ export default function ChatInput({
         marginRight={2}
         marginLeft={2}
       />
-      <Button onClick={onCreate} marginRight={4}>
-        Send message
+      <Button
+        onClick={onCreate}
+        marginRight={4}
+        paddingLeft={8}
+        paddingRight={8}
+      >
+        Send
       </Button>
     </Flex>
   );
