@@ -20,7 +20,9 @@ jobs:
       - name: install modules
         run: npm install
       - name: eslint on frontend
-        run: npm run -w packages/frontend eslint-fix
+        run: |
+          npm run -w packages/frontend eslint-fix
+          npm run -w packages/frontend eslint
       - name: eslint on backend
         run: npm run -w packages/backend eslint-fix
       - name: status
