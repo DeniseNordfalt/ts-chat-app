@@ -28,7 +28,7 @@ export default function UserCreatePage() {
       password,
     };
     try {
-      const response = await axios.post("/users", user);
+      await axios.post("/users", user);
       navigate("/login");
     } catch (error) {
       setError("Username or email already exists");
