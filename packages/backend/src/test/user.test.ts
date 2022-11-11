@@ -1,9 +1,9 @@
 import { describe, expect, test } from "@jest/globals";
 import { Response, Request } from "express";
-import { saveUser } from "../src/controllers/users";
+import { saveUser } from "../controllers/users";
 import { UserItem } from "@ts-chat-app/shared";
 
-jest.mock("../src/models/users-repository");
+jest.mock("../models/users-repository");
 
 const mockRequest = (body: UserItem) => {
   return { body } as Request<UserItem>;
