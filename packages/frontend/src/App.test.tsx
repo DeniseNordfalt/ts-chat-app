@@ -1,9 +1,24 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
+import UserCreatePage from "./pages/UserCreatePage";
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test("renders user create page", () => {
+  render(
+    <Router>
+      <UserCreatePage />
+    </Router>
+  );
+
+  const usernameElement = screen.getByLabelText(/Username/i);
+  expect(usernameElement).toBeInTheDocument();
+
+  const passwordElement = screen.getByLabelText(/Password/i);
+  expect(passwordElement).toBeInTheDocument();
+
+  const emailElement = screen.getByLabelText(/Email/i);
+  expect(emailElement).toBeInTheDocument();
+
+  const submitElement = screen.getByText(/Register/i);
+  expect(submitElement).toBeInTheDocument();
 });

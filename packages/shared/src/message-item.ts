@@ -1,6 +1,7 @@
 export interface MessageItem {
-  _id?: string;
+  id?: string;
   text: string;
   timeStamp: Date;
   author: string;
+  username: string;
 }

@@ -19,10 +19,21 @@ axios.interceptors.request.use((config) => {
   }
   const jwt = localStorage.getItem("jwt");
   if (jwt) {
-    config.headers["authorization"] = `Bearer ${jwt}`;
+    config.headers.authorization = `Bearer ${jwt}`;
   }
   return config;
 });
+
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      localStorage.removeItem("jwt_token");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
 
 function App() {
   return (
@@ -30,11 +41,10 @@ function App() {
       <ChakraProvider>
         <Layout>
           <Routes>
-            <Route path="/" />
+            <Route path="/" element={<ChatPage />} />
+
             <Route path="/register" element={<UserCreatePage />} />
             <Route path="/login" element={<UserLoginPage />} />
-
-            <Route path="/chat" element={<ChatPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

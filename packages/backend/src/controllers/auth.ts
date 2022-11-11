@@ -1,24 +1,17 @@
 import { UserItem, Credentials } from "@ts-chat-app/shared";
 import { NextFunction, Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
-import { getUserByUsername } from "./users-service";
+import { loadUser } from "../models/users-repository";
 import bcrypt from "bcryptjs";
 
 const secret: string = process.env.JWT_SECRET || "secret";
 
-export type TokenPayload = {
-  id: string;
-  username: string;
-  email: string;
-  sub: string;
-};
-
 export interface JwtRequest<T> extends Request<T> {
-  jwt?: TokenPayload;
+  jwt?: Credentials;
 }
 
-export const authenticateToken = (
-  req: JwtRequest<any>,
+export const authenticateToken = async (
+  req: JwtRequest<unknown>,
   res: Response,
   next: NextFunction
 ) => {
@@ -26,7 +19,7 @@ export const authenticateToken = (
 
   if (token) {
     try {
-      const payload = jsonwebtoken.verify(token, secret) as TokenPayload;
+      const payload = jsonwebtoken.verify(token, secret) as Credentials;
       req.jwt = payload;
       next();
     } catch (err) {
@@ -35,7 +28,6 @@ export const authenticateToken = (
   } else {
     res.status(401).send("No token provided");
   }
-  next();
 };
 
 export const loginUser = async (req: JwtRequest<UserItem>, res: Response) => {
@@ -54,14 +46,13 @@ export const loginUser = async (req: JwtRequest<UserItem>, res: Response) => {
     secret,
     { expiresIn: "1800s" }
   );
-  res.send({ token: token });
-  // return res.sendStatus(200);
+  res.send({ token });
 };
 
 const performAuthentication = async (
   credentials: Credentials
 ): Promise<UserItem | null> => {
-  const userItem = await getUserByUsername(credentials.username);
+  const userItem = await loadUser(credentials.username);
   if (userItem) {
     const passwordMatch = await bcrypt.compare(
       credentials.password,

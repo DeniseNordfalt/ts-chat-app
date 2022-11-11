@@ -1,0 +1,22 @@
+env:
+  browser: true
+  es2021: true
+  node: true
+extends:
+  - standard
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:prettier/recommended
+parser: "@typescript-eslint/parser"
+parserOptions:
+  ecmaVersion: latest
+  sourceType: module
+plugins:
+  - "@typescript-eslint"
+  - prettier
+rules: { "prettier/prettier": ["error"] }
+# rules: { "prettier/prettier": ["error", { "endOfLine": "auto" }] }
+# use eslint-fix for CR errors, or change rules to endOfLine auto to disregard them
+ignorePatterns:
+  - /node_modules
+  - tsconfig.json
