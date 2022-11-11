@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Heading, Link } from "@chakra-ui/react";
-import axios from "axios";
 
 export default function Layout({ children }: { children?: React.ReactNode }) {
   const navigate = useNavigate();
