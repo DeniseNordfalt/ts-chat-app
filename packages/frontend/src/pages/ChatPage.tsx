@@ -1,30 +1,37 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { MessageItem } from "@ts-chat-app/shared";
-import { Input, Button, Flex } from "@chakra-ui/react";
-import ChatInput from "../components/molecules/ChatInput";
-
 import {
   useEventSource,
   useEventSourceListener,
 } from "@react-nano/use-event-source";
+import { MessageItem } from "@ts-chat-app/shared";
+import ChatInput from "../components/molecules/ChatInput";
+import MessageList from "../components/MessageList";
 
-axios.defaults.baseURL = "http://localhost:4000";
+axios.interceptors.request.use((config) => {
+  if (!config?.headers) {
+    config.headers = {};
+  }
+  const jwt = localStorage.getItem("jwt");
+  if (jwt) {
+    config.headers.authorization = `Bearer ${jwt}`;
+  }
+  return config;
+});
 
-type Props = {};
-
-export default function ChatPage({}: Props) {
+axios.defaults.baseURL =
+  process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
+export default function ChatPage() {
   const [messageText, setMessageText] = useState<string>("");
   const [messages, setMessages] = useState<MessageItem[]>([]);
   const [error, setError] = useState<string | undefined>();
-  const [eventSource] = useEventSource("http://localhost:4000/sse", true);
+  const [eventSource] = useEventSource(`${axios.defaults.baseURL}/sse`, true);
 
   useEventSourceListener(
     eventSource,
     ["message"],
     (event) => {
       const message = JSON.parse(event.data) as MessageItem;
-      console.log("message", message);
 
       setMessages((messages) => [...messages, message]);
     },
@@ -32,102 +39,38 @@ export default function ChatPage({}: Props) {
   );
 
   const fetchMessages = async (): Promise<MessageItem[]> => {
-    const response = await axios.get<MessageItem[]>("/messages");
-    console.log(response.data);
+    const token = localStorage.getItem("jwt_token");
+    const response = await axios.get<MessageItem[]>("/messages", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     return response.data;
   };
 
-  const MessageList = ({
-    messages,
-    error,
-  }: {
-    messages: MessageItem[];
-    error?: string;
-  }) => {
-    if (error) {
-      return <div>{error}</div>;
-    } else if (messages) {
-      return (
-        <div>
-          {messages.map((item, index) => {
-            return (
-              // <div key={item._id}>
-              <div key={index}>
-                <p>{item.author}</p>
-                <p>{item.text}</p>
-              </div>
-            );
-          })}
-        </div>
-      );
-    } else {
-      return <div>'Waiting for messages'</div>;
-    }
-  };
-
-  // const MessageInput = ({
-  //   messageText,
-  //   setMessageText,
-  //   onCreate,
-  // }: {
-  //   messageText: string;
-  //   setMessageText: (text: string) => void;
-  //   onCreate: (text: string) => void;
-  // }) => {
-  //   return (
-  //     <>
-  //       <Flex
-  //         direction="row"
-  //         justifyContent="space-between"
-  //         alignItems="center"
-  //         w="100%"
-  //         p={4}
-  //         //   bg="gray.100"
-  //       >
-  //         <Input
-  //           value={messageText}
-  //           onChange={(e) => setMessageText(e.target.value)}
-  //         />
-
-  //         <Button onClick={(e) => onCreate(messageText)}>Send message</Button>
-  //       </Flex>
-  //     </>
-  //   );
-  // };
-
   const createMessage = async (messageText: string): Promise<void> => {
-    const messageItem: MessageItem = {
-      author: "test",
+    const token = localStorage.getItem("jwt_token");
+    const messageItem: Partial<MessageItem> = {
       text: messageText,
-      timeStamp: new Date(),
     };
 
-    // try {
-    //   await axios.post("/messages", messageItem);
-    //   const response = await axios.get<MessageItem[]>("/messages");
-    //   setMessages(response.data);
-    // } catch (err) {
-    //   setMessages([]);
-    //   setError("Something went wrong when fetching my messages...");
-    // } finally {
-    //   setMessageText("");
-    // }
     try {
       await axios.post(`/messages`, messageItem, {
         withCredentials: true,
+        headers: { Authorization: `Bearer ${token}` },
       });
       setMessageText("");
-    } catch (err) {
+    } catch (error) {
       setError("Something went wrong when fetching my messages...");
     }
   };
 
   useEffect(() => {
     fetchMessages()
-      .then(setMessages)
-      .catch((error) => {
+      .then((messages) => {
+        setMessages(messages);
+      })
+      .catch(() => {
         setMessages([]);
-        setError("Something went wrong when fetching my messages...");
+        setError("something went wrong when fetching my messages...");
       });
   }, []);
 

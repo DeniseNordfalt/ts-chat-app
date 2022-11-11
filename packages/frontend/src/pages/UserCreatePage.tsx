@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { UserItem } from "@ts-chat-app/shared";
 import FormInput from "../components/molecules/FormInput";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@chakra-ui/react";
 
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:4000";
+axios.defaults.baseURL =
+  process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
 
-type Props = {};
-
-export default function UserCreatePage({}: Props) {
+export default function UserCreatePage() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [error, setError] = useState<string | undefined>();
+
+  const navigate = useNavigate();
 
   const createUser = async (
     username: string,
@@ -19,15 +23,15 @@ export default function UserCreatePage({}: Props) {
     email: string
   ) => {
     const user: UserItem = {
-      username: username,
-      email: email,
-      password: password,
+      username,
+      email,
+      password,
     };
     try {
       const response = await axios.post("/users", user);
-      console.log(response.data);
+      navigate("/login");
     } catch (error) {
-      console.error(error);
+      setError("Username or email already exists");
     } finally {
       setUsername("");
       setPassword("");
@@ -35,13 +39,18 @@ export default function UserCreatePage({}: Props) {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    createUser(username, password, email);
+  };
+
   return (
     <div>
       <h1>Create User</h1>
       <form
+        id="create-user-form"
         onSubmit={(e) => {
-          e.preventDefault();
-          createUser(username, password, email);
+          handleSubmit(e);
         }}
       >
         <FormInput
@@ -67,8 +76,11 @@ export default function UserCreatePage({}: Props) {
           type="password"
         />
 
-        <button type="submit">Register</button>
+        <Button type="submit" margin={2} marginLeft={4}>
+          Register
+        </Button>
       </form>
+      {error && <div>{error}</div>}
     </div>
   );
 }
