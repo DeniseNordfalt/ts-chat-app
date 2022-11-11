@@ -8,12 +8,12 @@ on:
     branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+  workflow_dispatch: 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  eslint:
+  eslint-job:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,9 +24,24 @@ jobs:
           npm run -w packages/frontend eslint-fix
           npm run -w packages/frontend eslint
       - name: eslint on backend
-        run: npm run -w packages/backend eslint-fix
+        run: |
+          npm run -w packages/backend eslint-fix
+          npm run -w packages/frontend eslint
       - name: status
         run: echo "This job's status is ${{ job.status }}."
+  test-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: install modules
+        run: npm install
+      - name: test on frontend
+        run: npm run test -w packages/frontend
+      - name: test on backen
+        run: npm run test -w packages/backend
+      - name: status
+        run: echo "This job's status is ${{ job.status }}."
+      
       
 
   
