@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Flex } from "@chakra-ui/react";
+import { Input, Flex, FormLabel } from "@chakra-ui/react";
 
 type Props = {
   id: string;
@@ -22,13 +22,15 @@ export default function FormInput({
 }: Props) {
   return (
     <Flex direction="column" w="100%" p={4}>
-      <label htmlFor={id}>{label}</label>
+      <FormLabel htmlFor={id}>{label}</FormLabel>
       <Input
         id={id}
         type={type}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
+        bg={"white"}
+        color={"teal.800"}
         required={required}
       />
     </Flex>
