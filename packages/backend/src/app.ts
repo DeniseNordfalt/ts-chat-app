@@ -12,7 +12,7 @@ dotenv.config();
 const app: Application = express();
 
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:3000";
-const port: number = parseInt(process.env.SERVER_PORT || "3001");
+const port: number = parseInt(process.env.SERVER_PORT || "4000");
 const mongoUrl: string =
   process.env.MONGODB_URL || "mongodb://localhost:27017/chat-app";
 
@@ -53,7 +53,7 @@ app.use("/sse", (req, res) => {
   console.info(`Client ${clientId} connected`);
 
   req.on("close", () => {
-    console.log(`${clientId} Connection closed`);
+    console.info(`${clientId} Connection closed`);
     sseClients = sseClients.filter((c) => c.id !== clientId);
   });
 });
@@ -61,7 +61,7 @@ app.use("/sse", (req, res) => {
 // listen to the port and start the database
 app.listen(port, async () => {
   await setupMongoDb(mongoUrl);
-  console.log(`App is listening on port ${port} !`);
+  console.info(`App is listening on port ${port} !`);
 });
 
 export default app;

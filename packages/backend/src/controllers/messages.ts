@@ -13,7 +13,6 @@ export const saveMessage = async (
   req: JwtRequest<MessageItem>,
   res: Response<MessageItem[] | string>
 ): Promise<void> => {
-  console.log(req.jwt);
   if (req.jwt) {
     if (req.body && req.body.text && req.body.text !== "") {
       try {
@@ -69,12 +68,12 @@ export const loadMessages = async (
 ): Promise<void> => {
   try {
     const messages = await loadAllMessageItems();
-    if (messages.length > 0) {
-      res.status(200).json(messages);
-    } else {
-      res.status(404).json("No messages found");
-    }
+    // if (messages.length > 0) {
+    res.status(200).json(messages);
+    // } else {
+    //   res.status(404).json(messages);
+    // }
   } catch (e) {
-    res.status(400).json("something went wrong!");
+    res.status(400).json("Something went wrong!");
   }
 };
