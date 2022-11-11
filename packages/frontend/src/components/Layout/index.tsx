@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Heading, Link } from "@chakra-ui/react";
+import { Box, Flex, Heading, Link, Button } from "@chakra-ui/react";
 
 export default function Layout({ children }: { children?: React.ReactNode }) {
   const navigate = useNavigate();
@@ -21,27 +21,33 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
       maxW={{ base: "100%", md: "80%", lg: "60%" }}
       margin="auto"
     >
-      <Box as="header" flex="0 0 auto" bgColor="teal.500" color="white" p={4}>
+      <Box
+        as="header"
+        display={"flex"}
+        bgColor="teal.500"
+        color="white"
+        p={4}
+        justifyContent="space-between"
+      >
         <Heading as="h1" size="lg" paddingStart={3}>
           <Link href="/">Chat App</Link>
         </Heading>
-      </Box>
-      <Box as="nav" padding={2} bgColor="teal.300" flex="0 0 auto">
-        <Link href="/" padding={1}>
-          Home
-        </Link>
-        <Link href="/login" padding={1}>
-          Login
-        </Link>
-        <Link href="/register" padding={1}>
-          Register
-        </Link>
         {token && (
-          <Link onClick={handleLogout} padding={1}>
+          <Button
+            onClick={handleLogout}
+            paddingStart={4}
+            bg={"white"}
+            color={"teal.900"}
+            borderRadius={4}
+            fontSize={"lg"}
+            fontWeight={"bold"}
+            marginRight={"3"}
+          >
             Logout
-          </Link>
+          </Button>
         )}
       </Box>
+      <Box as="span" padding={4} bgColor="teal.300" flex="0 0 auto"></Box>
 
       <Box as="main" flex="1 1 auto" margin="0 auto" minW="80%">
         {children}

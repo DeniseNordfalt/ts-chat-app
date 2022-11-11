@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   useEventSource,
@@ -7,7 +7,7 @@ import {
 import { MessageItem } from "@ts-chat-app/shared";
 import ChatInput from "../components/molecules/ChatInput";
 import MessageList from "../components/MessageList";
-import { Box, Heading } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 axios.interceptors.request.use((config) => {
   if (!config?.headers) {
