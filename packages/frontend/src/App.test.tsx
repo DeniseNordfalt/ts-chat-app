@@ -19,6 +19,6 @@ test("renders user create page", () => {
   const emailElement = screen.getByLabelText(/Email/i);
   expect(emailElement).toBeInTheDocument();
 
-  const submitElement = screen.getByText(/Register/i);
-  expect(submitElement).toBeInTheDocument();
+  const submitButtonElement = screen.getByRole("button", { name: /Register/i });
+  expect(submitButtonElement).toBeInTheDocument();
 });
