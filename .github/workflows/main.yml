@@ -1,7 +1,6 @@
 name: Chat App
 run-name: ${{ github.actor }}
 
-
 on:
   push:
     branches: [ "main" ]
@@ -19,14 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: install modules
-      - run: npm ci
+        run: npm install
       - name: eslint on frontend
-      - run: npm run -w packages/frontend eslint-fix
-      - run: npm run -w packages/frontend eslint
+        run: npm run -w packages/frontend eslint-fix
       - name: eslint on backend
-      - run: npm run -w packages/backend eslint-fix
-      - run: npm run -w packages/backend eslint
-      - run: echo "This job's status is ${{ job.status }}."
+        run: npm run -w packages/backend eslint-fix
+      - name: status
+        run: echo "This job's status is ${{ job.status }}."
       
 
   
