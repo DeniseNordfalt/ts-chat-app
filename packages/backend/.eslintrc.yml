@@ -16,3 +16,7 @@ plugins:
   - prettier
 rules: { "prettier/prettier": ["error"] }
 # rules: { "prettier/prettier": ["error", { "endOfLine": "auto" }] }
+# use eslint-fix for CR errors, or change rules to endOfLine auto to disregard them
+ignorePatterns:
+  - /node_modules
+  - tsconfig.json
