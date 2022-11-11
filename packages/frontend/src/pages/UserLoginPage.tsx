@@ -10,6 +10,7 @@ axios.defaults.baseURL =
 export default function UserLoginPage() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const navigate = useNavigate();
 
   const loginUser = async (username: string, password: string) => {
     const user = {
@@ -21,16 +22,15 @@ export default function UserLoginPage() {
       if (response.data.token) {
         localStorage.setItem("jwt_token", response.data.token);
       }
+      navigate("/");
     } catch (error) {
       console.error(error);
     } finally {
       setUsername("");
       setPassword("");
-      navigate("/");
     }
   };
 
-  const navigate = useNavigate();
   return (
     <Box maxWidth={"600px"} margin={"auto"} paddingTop={"10vh"}>
       <form

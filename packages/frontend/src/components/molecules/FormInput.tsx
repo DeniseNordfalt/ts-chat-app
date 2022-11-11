@@ -18,7 +18,6 @@ export default function FormInput({
   setValue,
   placeholder,
   type,
-  required,
 }: Props) {
   return (
     <Flex direction="column" w="100%" p={4}>
@@ -31,7 +30,7 @@ export default function FormInput({
         placeholder={placeholder}
         bg={"white"}
         color={"teal.800"}
-        required={required}
+        required={true}
       />
     </Flex>
   );
