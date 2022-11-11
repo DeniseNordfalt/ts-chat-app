@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { UserItem } from "@ts-chat-app/shared";
 import FormInput from "../components/molecules/FormInput";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@chakra-ui/react";
+import { Button, Heading, Box } from "@chakra-ui/react";
 
 import axios from "axios";
 
@@ -45,8 +45,15 @@ export default function UserCreatePage() {
   };
 
   return (
-    <div>
-      <h1>Create User</h1>
+    <Box maxWidth={"600px"} margin={"auto"} paddingTop={"10vh"}>
+      <Heading
+        color={"teal.800"}
+        paddingLeft={4}
+        paddingTop={4}
+        paddingBottom={6}
+      >
+        Register
+      </Heading>
       <form
         id="create-user-form"
         onSubmit={(e) => {
@@ -75,12 +82,16 @@ export default function UserCreatePage() {
           setValue={setPassword}
           type="password"
         />
-
-        <Button type="submit" margin={2} marginLeft={4}>
-          Register
-        </Button>
+        <Box display={"flex"} justifyContent={"space-between"}>
+          <Button type="submit" margin={2} marginLeft={4}>
+            Register
+          </Button>
+          <Button margin={2} marginRight={4} onClick={() => navigate("/login")}>
+            Back to Login
+          </Button>
+        </Box>
       </form>
       {error && <div>{error}</div>}
-    </div>
+    </Box>
   );
 }
