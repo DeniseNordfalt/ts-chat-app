@@ -12,7 +12,7 @@ COPY ./packages/frontend/ ./packages/frontend/
 COPY ./packages/shared/ ./packages/shared/
 
 ARG APP_CHAT_API
-ENV REACT_APP_SERVER_URL ${APP_CHAT_API}
+ENV REACT_APP_SERVER_URL=${APP_CHAT_API}
 
 RUN npm run build -w packages/frontend
 
